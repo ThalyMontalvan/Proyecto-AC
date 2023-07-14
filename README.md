@@ -1,10 +1,18 @@
 # Proyecto-AC
-Este es un código escrito en lenguaje ensamblador que se puede usar para sumar, restar, multiplicar o dividir números complejos. El código está diseñado para ser ejecutado en un sistema operativo DOS, y se ha formateado como un archivo .COM que puede ser cargado y ejecutado directamente en memoria.
+Calculadora de numeros complejos en lenguaje ensamblador para emu8086
+Este programa en lenguaje ensamblador para emu8086 es una calculadora que realiza operaciones aritméticas básicas como suma, resta, multiplicación y división. A continuación, se presenta una breve descripción de cómo funciona el programa y cómo se puede utilizar.
 
-El código comienza en la dirección de memoria 100h y tiene dos secciones principales: .data y .text. La sección .data contiene definiciones de variables utilizadas en el programa, mientras que la sección .text contiene el código que realiza las operaciones.
+Cómo funciona
+El programa comienza con una pantalla de bienvenida que solicita al usuario que elija una opción de la calculadora. El usuario puede elegir entre cuatro opciones diferentes ingresando un número del 1 al 4. Si el usuario ingresa un número fuera de este rango, el programa muestra un mensaje de error y solicita al usuario que ingrese una opción válida.
 
-El programa comienza mostrando un mensaje de bienvenida y pidiendo al usuario que introduzca un número. Luego, el programa solicita al usuario que introduzca un operador aritmético (+, -, *, /) y un segundo número. Dependiendo del operador introducido por el usuario, el programa realiza la operación correspondiente y muestra el resultado.
+Una vez que el usuario ha ingresado una opción válida, el programa solicita al usuario que ingrese dos números en función de la operación seleccionada. Luego, realiza la operación seleccionada y muestra el resultado por pantalla.
 
-El código utiliza una serie de interrupciones del sistema DOS, a través de la función INT 21h, para mostrar mensajes en la pantalla y recibir entrada del usuario.
+El usuario puede elegir salir del programa en cualquier momento ingresando el número 5.
 
-En resumen, este es un programa simple escrito en lenguaje ensamblador que realiza operaciones aritméticas en números complejos. Para ejecutarlo, simplemente cargue el archivo .COM en la memoria y comience a usarlo.
+Cómo utilizar
+Descarga e instala el emulador emu8086 en tu computadora. Puedes encontrarlo en el siguiente enlace: https://emu8086-microprocessor-emulator.softonic.com/ ↗.
+Copia el código del programa en un archivo de texto y guárdalo con la extensión ".asm".
+Abre el emulador emu8086 y abre el archivo ".asm" desde el menú "File".
+Haz clic en el botón "Compile" para compilar el programa.
+Haz clic en el botón "Run" para ejecutar el programa.
+Sigue las instrucciones en pantalla para utilizar la calculadora.
