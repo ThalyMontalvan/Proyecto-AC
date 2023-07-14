@@ -1,118 +1,165 @@
-format binary as 'com'
-
 org 100h
 
-section '.data' data readable writeable
-    num1 db 0
-    resultado db 0
+include 'emu8086.inc'
+DEFINE_SCAN_NUM
+DEFINE_PRINT_STRING
+DEFINE_PRINT_NUM
+DEFINE_PRINT_NUM_UNS
 
-section '.text' code readable executable
+jmp inicio
+
+texto db 13,10,13,10, 'CALCULADORA ASSEMBLER'
+
+db 13,10,13,10, ' ELIJA UNA OPCION => [1] SUMA => [2] RESTA => [3] MULTIPLICACION => [4] DIVISION'
+ingreso db 13,10,13,10, 'Ingrese una de las opciones: $'
+opcion_s db 13,10,13,10, ' El programa ha finalizado $'
+opcion_1 db 13,10,13,10, ' Opciones invalidas$'
+texto1 db 13,10,13,13, 'Ingrese el primer numero: $'
+texto2 db 13,10,13,10, 'Ingrese el segundo numero: $'
+texto3 db 13,10,13,10, 'la suma es: $'
+texto4 db 13,10,13,10, 'la resta es: $'
+texto5 db 13,10,13,10, 'la multiplicacion es es: $'
+texto6 db 13,10,13,10, 'la division es: $'
+
+num1 dw ?
+num2 dw ?
+numero dw ?
 inicio:
-    ;iniciar modo texto
-    mov ah, 9 
-    mov dx, bienvenida
-    int 21h
 
-    mov ah, 1 
-    int 21h
-    sub al, '0'
-    mov [num1], al
-    
-    mov ah, 9
-    mov dx, operador
-    int 21h
+	mov ah, 09
+	lea dx, texto
+	int 21h
 
-    mov ah, 1
-    int 21h
+	call SCAN_NUM
+	lea dx, ingreso
+	mov numero, cx
 
-    cmp al, '+'
-    je suma
+	cmp numero, 01h
+	je suma
+	cmp numero, 02h
+	je resta
+	cmp numero, 03h
+	je multiplicacion
+	cmp numero, 04h
+	je division
+	cmp numero, 05h
+	je salir
+	cmp numero, 05h
+	jnz invalido
 
-    cmp al, '-'
-    je resta
-
-    cmp al, '*'
-    je multiplicar
-
-    cmp al, '/'
-    je dividir
-
+invalido:
+	mov ah, 09h
+	lea dx, opcion_1
+	int 21h
+	jmp inicio
 suma:
-    mov ah, 9
-    mov dx, pedir_segundo_numero
-    int 21h
 
-    mov ah,1
-    int 21h
-    sub al, '0'
+	mov ah, 09
+	lea dx, texto1
+	int 21h
 
-    add [num1], al
+	call SCAN_NUM
+	mov num1, cx
 
-    jmp calcular
+	mov ah, 09
+	lea dx, texto2
+	int 21h
+	
+	call SCAN_NUM
+	mov num2, cx
+
+	mov ah, 09
+	lea dx, texto3
+	int 21h
+	
+	mov ax, num1
+	add ax, num2
+	call PRINT_NUM
+	jmp inicio
 
 resta:
-    mov ah, 9
-    mov dx, pedir_segundo_numero
-    int 21h
 
-    mov ah,1
-    int 21h
-    sub al, '0'
+	mov ah, 09
+	lea dx, texto1
+	int 21h
 
-    sub [num1], al
+	call SCAN_NUM
+	mov num1, cx
 
-    jmp calcular
+	mov ah, 09
+	lea dx, texto2
+	int 21h
+	
+	call SCAN_NUM
+	mov num2, cx
 
-multiplicar:
-    mov ah, 9
-    mov dx, pedir_segundo_numero
-    int 21h
+	mov ah, 09
+	lea dx, texto4
+	int 21h
+	mov ax, num1
+	sub ax, num2
+	call PRINT_NUM
+	jmp inicio
 
-    mov ah,1
-    int 21h
-    sub al, '0'
+multiplicacion:
+	mov ah, 09
+	lea dx, texto1
+	int 21h
+	
+	call SCAN_NUM
+	mov num1, cx
 
-    mul [num1]
+	mov ah, 09
+	lea dx, texto2
+	int 21h
 
-    jmp calcular
+	call SCAN_NUM
+	mov num2, cx
 
-dividir:
-    mov ah, 9
-    mov dx, pedir_segundo_numero
-    int 21h
+	mov ah, 09
+	lea dx, texto5
+	int 21h
+	mov ax, num1
+	mov bx, num2
+	mul bx
+	call PRINT_NUM
+	jmp inicio
 
-    mov ah,1
-    int 21h
-    sub al, '0'
+division:
+	mov ah, 09
+	lea dx, texto1
+	int 21h
 
-    div [num1]
+	call SCAN_NUM
+	mov num1, cx
 
-    jmp calcular
+	mov ah, 09
+	lea dx, texto2
+	int 21h
+	
+	call SCAN_NUM
+	mov num2, cx
 
+	mov ah, 09
+	lea dx, texto6
+	int 21h
+	xor dx, dx
+	mov ax, num1
+	mov bx, num2
+	div bx
+	call PRINT_NUM
+	jmp inicio
 
-calcular:
-    mov ah, 9
-    mov dx, mostrar_resultado
-    int 21h
+salir:
+	mov ah, 09
+	lea dx, opcion_s
+	int 21h
+	end
+ret
 
-    add [resultado], '0'
+mov ax,  4c00h
+int 21h
 
-    mov ah, 9
-    mov dx, resultado
-    int 21h
+ends
 
-    mov ah, 4ch
-    int 21h
-
-section '.data' data readable writeable
-
-bienvenida db 'Bienvenido, inserte un numero:', 13, 10, '$'
-
-operador db 'Inserte un operador aritmetico:', 13, 10, '$'
-
-pedir_segundo_numero db 'Inserte el segundo numero:', 13, 10, '$'
-
-mostrar_resultado db 'El resultado de la Operacion es:', 13, 10, '$'
-
-section '.bss' data readable buffer resb 1
-
+end start
